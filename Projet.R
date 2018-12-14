@@ -7,4 +7,5 @@ ggplot(df1, aes(x = NOC, y = somme, color = NOC)) + geom_point()
 df2 <- ddply(df, c("Sport", "Sex"), summarise, somme = sum(count(Sex)$freq))
 ggplot(df2, aes(x = Sport, y = somme, color = Sex)) + geom_point()
 
-df3 <- ddply(df, c("NOC", "Year"), summarise, somme = )
+df3 <- ddply(df, c("NOC", "Year"), summarise, somme = sum(count(ID)$freq))
+ggplot(df3, aes(x = Year, y = somme, color = NOC)) + geom_point()
