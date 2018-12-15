@@ -51,6 +51,15 @@ split(df,df$Continent)
 idxEurope<-which(df$Continent=="Europe")
 df[idxEurope,]
 
+# pasting
+# cbind : combines columns of two datasets
+# rbind : combines rows of two datasets
+
+# ordering
+arrange(df,df$Country) # order by country
+arrange(df,df$Capital) # order by capital
+# select,subset
+
 ##############################
 #      Character vectors     #
 ##############################
