@@ -1,5 +1,9 @@
 # setwd("/home/t_chen/travaux/5annee/BigData/")
 
+# install.packages("ggplot2")
+library(ggplot2)
+library(plyr)
+
 df <- read.csv("athlete_events.csv", sep = ",")
 # select the most interesting data to show
 df1 <- ddply(df, "NOC", summarise, somme = sum(count(Medal)$freq, na.rm = TRUE))
