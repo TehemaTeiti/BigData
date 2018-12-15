@@ -20,4 +20,7 @@ summary(notes)
 
 range(notes) # min & max
 sd(notes) # ecart-type (standard deviation) : the more values are dispersed, the more sd will be (if all values are equals, sd(x)=0)
-ecdf(notes) # empirical cumulative distribution function
+f<-ecdf(notes) # empirical cumulative distribution function
+data.frame(notes,f(notes))
+
+hist(notes) # histogram
