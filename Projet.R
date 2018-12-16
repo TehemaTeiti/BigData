@@ -24,11 +24,12 @@ topN<-function(df,col,n) {
 df1_top10<-topN(df1,df1$somme,10)
 x<-arrange(df1_top10,desc(df1_top10$somme))
 df1_top10$NOC2<-factor(x$NOC,x$NOC)
-ggplot(df1_top10, aes(NOC2,somme,color=NOC2)) + 
+ggplot(df1_top10, aes(NOC2,somme)) + 
   geom_bar(stat = "identity",aes(fill=NOC2)) + 
   geom_text(aes(label=somme),color="black",vjust=-0.3) +
   xlab("Country") + 
   ylab("Nb of medal") + 
+  labs(fill='Country') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 ###############
