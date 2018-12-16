@@ -42,4 +42,8 @@ topFiveMaleNames<-countMaleNames[order(countMaleNames$nbName,decreasing = TRUE),
 countFemaleNames<-countNamesBySex[countNamesBySex$Sexe=="F",]
 topFiveFemaleNames<-countFemaleNames[order(countFemaleNames$nbName,decreasing = TRUE),][1:5,]
 
-ggplot(topFiveMaleNames,aes(Prénom,nbName))+geom_bar(stat="identity")
+topAllNames <- rbind(topFiveFemaleNames,topFiveMaleNames)
+x<-arrange(topAllNames,Sexe,nbName)
+topAllNames$Prénom2<-factor(x$Prénom,x$Prénom)
+ggplot(x,aes(topAllNames$Prénom2,nbName,color=Sexe))+geom_bar(stat="identity",aes(fill=Sexe))+xlab("Prénom")+ylab("Nombre")
+
