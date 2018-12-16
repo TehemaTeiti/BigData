@@ -1,12 +1,17 @@
 # setwd("/home/t_chen/travaux/5annee/BigData/")
+# setwd("D:\\Etudes\\INSA\\5ISS\\Big_Data\\BigData")
 
+# recommended libraries by teacher
 #install.packages("ggplot2")
 library(ggplot2)
 library(plyr)
 library(reshape2)
 
 df <- read.csv("athlete_events.csv", sep = ",")
+
 # select the most interesting data to show
+
+# number of medal by country
 df1 <- ddply(df, "NOC", summarise, somme = sum(count(Medal)$freq, na.rm = TRUE))
 ggplot(df1, aes(x = NOC, y = somme, color = NOC)) + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
