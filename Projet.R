@@ -1,3 +1,7 @@
+#############
+### Setup ###
+#############
+
 # setwd("/home/t_chen/travaux/5annee/BigData/")
 # setwd("D:\\Etudes\\INSA\\5ISS\\Big_Data\\BigData")
 
@@ -21,21 +25,23 @@ ggplot(df1, aes(x = NOC, y = somme, color = NOC)) + geom_point() + theme(axis.te
 topN<-function(df,col,n) {
   return (df[order(col,decreasing = TRUE),][1:n,])
 }
+
 df1_top10<-topN(df1,df1$somme,10)
 x<-arrange(df1_top10,desc(df1_top10$somme))
 df1_top10$NOC2<-factor(x$NOC,x$NOC)
+
 ggplot(df1_top10, aes(NOC2,somme)) + 
   geom_bar(stat = "identity",aes(fill=NOC2)) + 
   geom_text(aes(label=somme),color="black",vjust=-0.3) +
-  xlab("Country") + 
-  ylab("Nb of medal") + 
+  labs(title = "Top 10 countries with the most medals", x = "Country", y = "Nb of medal") + 
   labs(fill='Country') +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5))
 
 ###############
 ### Graph 2 ###
 ###############
 
+# 
 df2 <- ddply(df, c("Sport", "Sex"), summarise, somme = sum(count(Sex)$freq))
 # facet_wrap(~Sex)
 ggplot(df2, aes(x = Sport, y = somme, color = Sex)) + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
