@@ -33,7 +33,7 @@ countNames<-ddply(prenoms,"Prénom",summarise,nbName=sum(Nombre))
 topTenNames<-countNames[order(countNames$nbName,decreasing = TRUE),][1:10,]
 ggplot(topTenNames,aes(Prénom,nbName))+geom_bar(stat="identity")+xlab("Prénom")+ylab("Nombre")
 
-# top 5 given names by sex + their evolution
+# top 5 given names by sex + (their evolution by year)
 countNamesBySex<-ddply(prenoms,c("Prénom","Sexe"),summarise,nbName=sum(Nombre))
 
 countMaleNames<-countNamesBySex[countNamesBySex$Sexe=="M",]

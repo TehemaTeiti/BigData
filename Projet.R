@@ -12,7 +12,7 @@ df <- read.csv("athlete_events.csv", sep = ",")
 # select the most interesting data to show
 
 # number of medal by country
-df1 <- ddply(df, "NOC", summarise, somme = sum(count(Medal)$freq, na.rm = TRUE))
+df1 <- ddply(df, "NOC", summarise, somme = sum(count(Medal[!is.na(Medal)])$freq))
 ggplot(df1, aes(x = NOC, y = somme, color = NOC)) + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 df2 <- ddply(df, c("Sport", "Sex"), summarise, somme = sum(count(Sex)$freq))
