@@ -1,8 +1,9 @@
 # setwd("/home/t_chen/travaux/5annee/BigData/")
 
-# install.packages("ggplot2")
+#install.packages("ggplot2")
 library(ggplot2)
 library(plyr)
+library(reshape2)
 
 df <- read.csv("athlete_events.csv", sep = ",")
 # select the most interesting data to show

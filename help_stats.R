@@ -24,3 +24,4 @@ f<-ecdf(notes) # empirical cumulative distribution function
 data.frame(notes,f(notes))
 
 hist(notes) # histogram
+
