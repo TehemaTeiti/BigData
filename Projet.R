@@ -2,7 +2,7 @@
 ### Setup ###
 #############
 
-# setwd("/home/t_chen/travaux/5annee/BigData/")
+setwd("/home/t_chen/travaux/5annee/BigData/BigData")
 # setwd("D:\\Etudes\\INSA\\5ISS\\Big_Data\\BigData")
 
 # recommended libraries by teacher
@@ -35,31 +35,46 @@ ggplot(df1_top10, aes(NOC2,somme)) +
   geom_text(aes(label=somme),color="black",vjust=-0.3) +
   labs(title = "Top 10 countries with the most medals", x = "Country", y = "Nb of medal") + 
   labs(fill='Country') +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))
 
 ###############
 ### Graph 2 ###
 ###############
 
 # 
-df2 <- ddply(df, c("Sport", "Sex"), summarise, somme = sum(count(Sex)$freq))
+df2 <- ddply(df, c("Year", "Sex"), summarise, moyenneH = mean(Height, na.rm = TRUE), moyenneW = mean(Weight, na.rm = TRUE))
 # facet_wrap(~Sex)
-ggplot(df2, aes(x = Sport, y = somme, color = Sex)) + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df2, aes(x = Year, y = moyenneH, color = Sex)) + 
+  geom_line() + 
+  theme(plot.title = element_text(hjust = 0.5))
+ggplot(df2, aes(x = Year, y = moyenneW, color = Sex)) + 
+  geom_line() + 
+  theme(plot.title = element_text(hjust = 0.5))
 
 ###############
 ### Graph 3 ###
 ###############
 
 # select the most interesting data to show
-df3 <- ddply(df, c("NOC", "Year"), summarise, somme = sum(count(ID)$freq))
-ggplot(df3, aes(x = NOC, y = somme, color = Year)) + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+df3 <- ddply(df, "NOC", summarise, NBAthelete = sum(count(ID)$freq))
+df3_ordered <- df3[order(df1$somme, decreasing = TRUE),][1:10,]
+df3_ordered$NOC <- factor(df3_ordered$NOC, df3_ordered$NOC)
+ggplot(df3_ordered, aes(NOC, NBAthelete)) + 
+  geom_bar(stat = "identity", aes(fill=NOC)) +
+  labs(title = "Top 10 countries with the most atheletes", x = "Country", y = "Nb of athelete") + 
+  geom_text(aes(label=NBAthelete),color="black",vjust=-0.3) +
+  labs(fill='Country') +
+  theme(plot.title = element_text(hjust = 0.5))
 
 ###############
 ### Graph 4 ###
 ###############
 
 # attention! sometimes Age = N/A
-df4 <- ddply(df, "Age", summarise, somme = sum(count(Medal)$freq, na.rm = TRUE))
+df4 <- ddply(df, "Age", summarise, somme = sum(count(Medal[!is.na(Medal)])$freq))
+df4 <- df4[!is.na(df4$Age),]
+ggplot(df4, aes(x = Age, y = somme)) +
+  geom_line()
 
 ###############
 ### Graph 5 ###
