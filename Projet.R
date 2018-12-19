@@ -19,7 +19,7 @@ df <- read.csv("athlete_events.csv", sep = ",")
 
 # number of medal by country
 df1 <- ddply(df, "NOC", summarise, somme = sum(count(Medal[!is.na(Medal)])$freq))
-ggplot(df1, aes(x = NOC, y = somme, color = NOC)) + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+# ggplot(df1, aes(x = NOC, y = somme, color = NOC)) + geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 # top 10 countries by number of medals
 topN<-function(df,col,n) {
@@ -27,8 +27,9 @@ topN<-function(df,col,n) {
 }
 
 df1_top10<-topN(df1,df1$somme,10)
-x<-arrange(df1_top10,desc(df1_top10$somme))
-df1_top10$NOC2<-factor(x$NOC,x$NOC)
+# n'est pas utile
+# x<-arrange(df1_top10,desc(df1_top10$somme))
+df1_top10$NOC2<-factor(df1_top10$NOC, df1_top10$NOC)
 
 ggplot(df1_top10, aes(NOC2,somme)) + 
   geom_bar(stat = "identity",aes(fill=NOC2)) + 
@@ -41,15 +42,21 @@ ggplot(df1_top10, aes(NOC2,somme)) +
 ### Graph 2 ###
 ###############
 
-# 
-df2 <- ddply(df, c("Year", "Sex"), summarise, moyenneH = mean(Height, na.rm = TRUE), moyenneW = mean(Weight, na.rm = TRUE))
+# pour plusieur graphes
 # facet_wrap(~Sex)
-ggplot(df2, aes(x = Year, y = moyenneH, color = Sex)) + 
-  geom_line() + 
+
+Year <- df$Year
+Sex <- df$Sex
+Height <- df$Height
+Weight <- df$Weight
+
+df2 <- data.frame(Year, Sex, Height, Weight)
+df2_BMI <- ddply(df2, c("Year", "Sex"), summarise, moyenne = round(mean(Weight/Height/Height*10000, na.rm = TRUE), 2))
+ggplot(df2_BMI, aes(x = Year, y = moyenne, color = Sex)) +
+  geom_line() +
+  labs(title = "The average BMI of athelete of all countries", x = "Year", y = "Average BMI") +
   theme(plot.title = element_text(hjust = 0.5))
-ggplot(df2, aes(x = Year, y = moyenneW, color = Sex)) + 
-  geom_line() + 
-  theme(plot.title = element_text(hjust = 0.5))
+
 
 ###############
 ### Graph 3 ###
