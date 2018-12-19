@@ -54,7 +54,7 @@ df2 <- data.frame(Year, Sex, Height, Weight)
 df2_BMI <- ddply(df2, c("Year", "Sex"), summarise, moyenne = round(mean(Weight/Height/Height*10000, na.rm = TRUE), 2))
 ggplot(df2_BMI, aes(x = Year, y = moyenne, color = Sex)) +
   geom_line() +
-  labs(title = "The average BMI of athelete of all countries", x = "Year", y = "Average BMI") +
+  labs(title = "The average BMI of athelete of all countrise", x = "Year", y = "Average Height") +
   theme(plot.title = element_text(hjust = 0.5))
 
 
@@ -77,18 +77,12 @@ ggplot(df3_ordered, aes(NOC, NBAthelete)) +
 ### Graph 4 ###
 ###############
 
-# attention! sometimes Age = N/A
+
 df4 <- ddply(df, "Age", summarise, somme = sum(count(Medal[!is.na(Medal)])$freq))
 df4 <- df4[!is.na(df4$Age),]
 ggplot(df4, aes(x = Age, y = somme)) +
   geom_line()
 
-###############
-### Graph 5 ###
-###############
-
-# moyenne = N/A existe
-df5 <- ddply(df, "NOC", summarise, moyenne = mean(Weight, trim = 0, na.rm = TRUE))
 
 
 
