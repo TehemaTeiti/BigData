@@ -6,6 +6,8 @@
 
 ## transform : add fields computed relatively to categories
 
+msleep
+
 ddply(msleep,"vore",transform,rank=rank(-sleep_total))
 
 ## summarise : group by category, and return aggregate stats
@@ -19,7 +21,7 @@ ddply(msleep,"vore",summarise,med=median(sleep_total))
 ## melt : transform large dataframe in long one
 
 df <- read.csv("dataset_test.csv", sep = ";")
-melt(df,id.vars = "Country",measure.vars = c("Taille","Poids"))
+melt(df,id.vars = "Pays",measure.vars = c("Taille","Poids", "Age"))
 
 ################
 ###   Plot   ###
