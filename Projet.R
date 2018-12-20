@@ -18,7 +18,10 @@ df <- read.csv("athlete_events.csv", sep = ",")
 ###############
 
 # number of medal by country
-df1 <- ddply(df, "NOC", summarise, nbMedals = sum(count(Medal[!is.na(Medal)])$freq), nbAthletes = sum(count(unique(ID))$freq))
+df1 <- ddply(df, "NOC", summarise, 
+             nbMedals = sum(count(Medal[!is.na(Medal)])$freq), 
+             nbAthletes = sum(count(unique(ID))$freq),
+             avgMedalPerAthletes = nbMedals/nbAthletes)
 
 # top 10 countries by number of medals
 topN<-function(df,col,n) {
@@ -34,14 +37,6 @@ ggplot(df1_top10, aes(NOC2,nbMedals)) +
   labs(title = "Top 10 countries with the most medals", x = "Country", y = "Nb of medal") + 
   labs(fill='Country') +
   theme(plot.title = element_text(hjust = 0.5))
-
-# evolution of number of medals over the years
-df1_overYears <- ddply(df,c("NOC","Year"),summarise,nbMedals=sum(count(Medal[!is.na(Medal)])$freq))
-df1_overYears_USA <- subset(df1_overYears,NOC=="USA")
-ggplot(df1_overYears_USA, aes(Year,nbMedals)) +
-  geom_area(aes(fill="red")) +
-  geom_text(aes(label=nbMedals),color="black",vjust=-0.3)
-
 
 ###############
 ### Graph 2 ###
@@ -87,8 +82,29 @@ ggplot(df3_ordered, aes(NOC, nbAthletes)) +
 df4 <- ddply(df, "Age", summarise, nbMedals = sum(count(Medal[!is.na(Medal)])$freq))
 df4 <- df4[!is.na(df4$Age),]
 ggplot(df4, aes(x = Age, y = nbMedals)) +
-  geom_line()
+  geom_line() +
+  labs(title = "Top 10 countries with the most athletes", x = "Country", y = "Nb of athletes") + 
+  geom_text(aes(label=nbAthletes),color="black",vjust=-0.3) +
+  labs(fill='Country') +
+  theme(plot.title = element_text(hjust = 0.5))
 
+### other graphs ###
 
+# evolution of number of medals over the years for USA
+df1_overYears <- ddply(df,c("NOC","Year"),summarise,nbMedals=sum(count(Medal[!is.na(Medal)])$freq))
+df1_overYears_USA <- subset(df1_overYears,NOC=="USA")
+ggplot(df1_overYears_USA, aes(Year,nbMedals)) +
+  geom_area(aes(fill="red")) +
+  geom_text(aes(label=nbMedals),color="black",vjust=-0.3) +
+  labs(title = "Number of medals for USA over the years", x = "Years", y = "Nb of medals") +
+  theme(plot.title = element_text(hjust = 0.5))
 
+# correlation between number of athletes and number of medals
+ggplot(df1,aes(nbAthletes,nbMedals)) +
+  geom_smooth() +
+  geom_point() +
+  labs(title = "Correlation between number of athletes and number of medals", x = "Nb of athletes", y = "Nb of medals") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# correlation between BMI and number of medals
 
