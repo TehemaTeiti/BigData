@@ -18,7 +18,7 @@ df <- read.csv("athlete_events.csv", sep = ",")
 ###############
 
 # number of medal by country
-df1 <- ddply(df, "NOC", summarise, nbMedals = sum(count(Medal[!is.na(Medal)])$freq))
+df1 <- ddply(df, "NOC", summarise, nbMedals = sum(count(Medal[!is.na(Medal)])$freq), nbAthletes = sum(count(unique(ID))$freq))
 
 # top 10 countries by number of medals
 topN<-function(df,col,n) {
@@ -36,12 +36,18 @@ ggplot(df1_top10, aes(NOC2,nbMedals)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 # evolution of number of medals over the years
+df1_overYears <- ddply(df,c("NOC","Year"),summarise,nbMedals=sum(count(Medal[!is.na(Medal)])$freq))
+df1_overYears_USA <- subset(df1_overYears,NOC=="USA")
+ggplot(df1_overYears_USA, aes(Year,nbMedals)) +
+  geom_area(aes(fill="red")) +
+  geom_text(aes(label=nbMedals),color="black",vjust=-0.3)
+
 
 ###############
 ### Graph 2 ###
 ###############
 
-# evolution of the mean of MBI over the years
+# evolution of the mean of BMI over the years
 
 Year <- df$Year
 Sex <- df$Sex
@@ -52,7 +58,7 @@ df2 <- data.frame(Year, Sex, Height, Weight)
 df2_BMI <- ddply(df2, c("Year", "Sex"), summarise, BMI_mean = round(mean(Weight/Height/Height*10000, na.rm = TRUE), 2))
 ggplot(df2_BMI, aes(x = Year, y = BMI_mean, color = Sex)) +
   geom_line() +
-  labs(title = "The average BMI of athelete of all countrise", x = "Year", y = "Average Height") +
+  labs(title = "The average BMI of athletes of all countries", x = "Year", y = "Average BMI") +
   theme(plot.title = element_text(hjust = 0.5))
 
 
@@ -62,13 +68,13 @@ ggplot(df2_BMI, aes(x = Year, y = BMI_mean, color = Sex)) +
 
 # number of athletes by countries over the years
 
-df3 <- ddply(df, "NOC", summarise, nbAtheletes = sum(count(ID)$freq))
+df3 <- ddply(df, "NOC", summarise, nbAthletes = sum(count(unique(ID))$freq))
 df3_ordered <- df3[order(df1$nbMedals, decreasing = TRUE),][1:10,]
 df3_ordered$NOC <- factor(df3_ordered$NOC, df3_ordered$NOC)
-ggplot(df3_ordered, aes(NOC, nbAtheletes)) + 
+ggplot(df3_ordered, aes(NOC, nbAthletes)) + 
   geom_bar(stat = "identity", aes(fill=NOC)) +
-  labs(title = "Top 10 countries with the most atheletes", x = "Country", y = "Nb of athelete") + 
-  geom_text(aes(label=nbAtheletes),color="black",vjust=-0.3) +
+  labs(title = "Top 10 countries with the most athletes", x = "Country", y = "Nb of athletes") + 
+  geom_text(aes(label=nbAthletes),color="black",vjust=-0.3) +
   labs(fill='Country') +
   theme(plot.title = element_text(hjust = 0.5))
 
