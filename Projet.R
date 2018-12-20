@@ -38,6 +38,8 @@ ggplot(df1_top10, aes(NOC2,somme)) +
   labs(fill='Country') +
   theme(plot.title = element_text(hjust = 0.5))
 
+# evolution of number of medals over the years
+
 ###############
 ### Graph 2 ###
 ###############
