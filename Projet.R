@@ -81,7 +81,9 @@ ggplot(df3_ordered, aes(NOC, NBAthelete)) +
 df4 <- ddply(df, "Age", summarise, somme = sum(count(Medal[!is.na(Medal)])$freq))
 df4 <- df4[!is.na(df4$Age),]
 ggplot(df4, aes(x = Age, y = somme)) +
-  geom_line()
+  geom_line() +
+  labs(title = "Different age with different number of medal", x = "Age", y = "Nb of medal") +
+  theme(plot.title = element_text(hjust = 0.5))
 
 
 
