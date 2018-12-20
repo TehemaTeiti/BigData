@@ -95,8 +95,8 @@ ggplot(df4, aes(x = Age, y = nbMedals)) +
 df1_overYears <- ddply(df,c("NOC","Year"),summarise,nbMedals=sum(count(Medal[!is.na(Medal)])$freq))
 df1_overYears_USA <- subset(df1_overYears,NOC=="USA")
 ggplot(df1_overYears_USA, aes(Year,nbMedals)) +
-  geom_area(stat = "identity", position = "stack", fill="red") +
-  #geom_text(aes(label=nbMedals),color="black",vjust=-0.3) +
+  geom_area(stat = "identity", position = "stack", fill="lightblue") +
+  geom_text(aes(label=nbMedals),color="black",vjust=-0.3) +
   labs(title = "Number of medals for USA over the years", x = "Years", y = "Nb of medals") +
   theme(plot.title = element_text(hjust = 0.5))
 
