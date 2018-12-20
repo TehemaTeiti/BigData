@@ -26,14 +26,17 @@ topN<-function(df,col,n) {
 }
 
 df1_top10<-topN(df1,df1$nbMedals,10)
-df1_top10$NOC2<-factor(df1_top10$NOC, df1_top10$NOC)
+df1_top10$NOC<-factor(df1_top10$NOC, df1_top10$NOC)
 
-ggplot(df1_top10, aes(NOC2,nbMedals)) + 
-  geom_bar(stat = "identity",aes(fill=NOC2)) + 
+ggplot(df1_top10, aes(NOC,nbMedals)) + 
+  geom_bar(stat = "identity",aes(fill=NOC)) + 
   geom_text(aes(label=nbMedals),color="black",vjust=-0.3) +
   labs(title = "Top 10 countries with the most medals", x = "Country", y = "Nb of medal") + 
   labs(fill='Country') +
   theme(plot.title = element_text(hjust = 0.5))
+
+ggsave("p1.pdf",path="image")
+ggsave("p1.png",path="image")
 
 ###############
 ### Graph 2 ###
@@ -41,19 +44,16 @@ ggplot(df1_top10, aes(NOC2,nbMedals)) +
 
 # evolution of the mean of BMI over the years
 
-Year <- df$Year
-Sex <- df$Sex
-Height <- df$Height
-Weight <- df$Weight
-Medal <- df$Medal
-
-df2 <- data.frame(Year, Sex, Height, Weight, Medal)
-df2_BMI <- ddply(df2, c("Year", "Sex"), summarise, BMI_mean = round(mean(Weight/Height/Height*10000, na.rm = TRUE), 2), nbMedals=sum(count(Medal[!is.na(Medal)])$freq))
-ggplot(df2_BMI, aes(x = Year, y = BMI_mean, color = Sex)) +
+df2 <- ddply(df, c("Year", "Sex"), summarise, 
+                 BMI_mean = round(mean(10000*Weight/Height/Height, na.rm = TRUE), 2), 
+                 nbMedals=sum(count(Medal[!is.na(Medal)])$freq))
+ggplot(df2, aes(x = Year, y = BMI_mean, color = Sex)) +
   geom_line() +
   labs(title = "The average BMI of athletes of all countries", x = "Year", y = "Average BMI") +
   theme(plot.title = element_text(hjust = 0.5))
 
+ggsave("p2.pdf",path="image")
+ggsave("p2.png",path="image")
 
 ###############
 ### Graph 3 ###
@@ -71,6 +71,9 @@ ggplot(df3_ordered, aes(NOC, nbAthletes)) +
   labs(fill='Country') +
   theme(plot.title = element_text(hjust = 0.5))
 
+ggsave("p3.pdf",path="image")
+ggsave("p3.png",path="image")
+
 ###############
 ### Graph 4 ###
 ###############
@@ -86,7 +89,12 @@ ggplot(df4, aes(x = Age, y = nbMedals)) +
   labs(fill='Country') +
   theme(plot.title = element_text(hjust = 0.5))
 
+ggsave("p4.pdf",path="image")
+ggsave("p4.png",path="image")
+
+####################
 ### other graphs ###
+####################
 
 # evolution of number of medals over the years for USA
 df1_overYears <- ddply(df,c("NOC","Year"),summarise,nbMedals=sum(count(Medal[!is.na(Medal)])$freq))
@@ -97,6 +105,9 @@ ggplot(df1_overYears_USA, aes(Year,nbMedals)) +
   labs(title = "Number of medals for USA over the years", x = "Years", y = "Nb of medals") +
   theme(plot.title = element_text(hjust = 0.5))
 
+ggsave("nbMed_overYears_USA.pdf",path="image")
+ggsave("nbMed_overYears_USA.png",path="image")
+
 # correlation between number of athletes and number of medals
 ggplot(df1,aes(nbAthletes,nbMedals)) +
   geom_smooth() +
@@ -104,9 +115,15 @@ ggplot(df1,aes(nbAthletes,nbMedals)) +
   labs(title = "Correlation between number of athletes and number of medals", x = "Nb of athletes", y = "Nb of medals") +
   theme(plot.title = element_text(hjust = 0.5))
 
+ggsave("cor_nbAth_nbMed.pdf",path="image")
+ggsave("cor_nbAth_nbMed.png",path="image")
+
 # correlation between BMI and number of medals
-ggplot(df2_BMI, aes(x=BMI_mean, y=nbMedals)) +
+ggplot(df2, aes(x=BMI_mean, y=nbMedals)) +
   geom_smooth() +
   geom_point() +
   labs(title = "Correlation between BMI and number of medals", x = "BMI", y = "Nb of athletes") +
   theme(plot.title = element_text(hjust = 0.5))
+
+ggsave("cor_BMI_nbMed.pdf",path="image")
+ggsave("cor_BMI_nbMed.png",path="image")
