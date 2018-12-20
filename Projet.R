@@ -93,7 +93,7 @@ df1_overYears <- ddply(df,c("NOC","Year"),summarise,nbMedals=sum(count(Medal[!is
 df1_overYears_USA <- subset(df1_overYears,NOC=="USA")
 ggplot(df1_overYears_USA, aes(Year,nbMedals)) +
   geom_area(stat = "identity", position = "stack", fill="lightblue") +
-  geom_text(aes(label=nbMedals),color="black",vjust=-0.3) +
+  # geom_text(aes(label=nbMedals),color="black",vjust=-0.3) +
   labs(title = "Number of medals for USA over the years", x = "Years", y = "Nb of medals") +
   theme(plot.title = element_text(hjust = 0.5))
 
@@ -108,5 +108,5 @@ ggplot(df1,aes(nbAthletes,nbMedals)) +
 ggplot(df2_BMI, aes(x=BMI_mean, y=nbMedals)) +
   geom_smooth() +
   geom_point() +
-  labs(title = "Correlation between BMI and number of athletes", x = "BMI", y = "Nb of athletes") +
+  labs(title = "Correlation between BMI and number of medals", x = "BMI", y = "Nb of athletes") +
   theme(plot.title = element_text(hjust = 0.5))
