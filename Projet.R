@@ -2,11 +2,8 @@
 ### Setup ###
 #############
 
-setwd("/home/t_chen/travaux/5annee/BigData/BigData")
-# setwd("D:\\Etudes\\INSA\\5ISS\\Big_Data\\BigData")
-
 # recommended libraries by teacher
-#install.packages("ggplot2")
+# install.packages("ggplot2")
 library(ggplot2)
 library(plyr)
 library(reshape2)
