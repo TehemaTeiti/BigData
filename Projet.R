@@ -18,7 +18,7 @@ df <- read.csv("athlete_events.csv", sep = ",")
 df1 <- ddply(df, "NOC", summarise, 
              nbMedals = sum(count(Medal[!is.na(Medal)])$freq), 
              nbAthletes = sum(count(unique(ID))$freq),
-             avgMedalPerAthletes = nbMedals/nbAthletes)
+             avgMedalPerAthletes = nbMedals/nbAthletes*100)
 
 # top 10 countries by number of medals
 topN<-function(df,col,n) {
@@ -66,7 +66,7 @@ df3_ordered <- df3[order(df1$nbMedals, decreasing = TRUE),][1:10,]
 df3_ordered$NOC <- factor(df3_ordered$NOC, df3_ordered$NOC)
 ggplot(df3_ordered, aes(NOC, nbAthletes)) + 
   geom_bar(stat = "identity", aes(fill=NOC)) +
-  labs(title = "Top 10 countries with the most athletes", x = "Country", y = "Nb of athletes") + 
+  labs(title = "Number of athletes in the top 10 countries", x = "Country", y = "Nb of athletes") + 
   geom_text(aes(label=nbAthletes),color="black",vjust=-0.3) +
   labs(fill='Country') +
   theme(plot.title = element_text(hjust = 0.5))
@@ -119,11 +119,29 @@ ggsave("cor_nbAth_nbMed.pdf",path="image")
 ggsave("cor_nbAth_nbMed.png",path="image")
 
 # correlation between BMI and number of medals
-ggplot(df2, aes(x=BMI_mean, y=nbMedals)) +
-  geom_smooth() +
+ggplot(na.omit(df2), aes(x=BMI_mean, y=nbMedals)) +
   geom_point() +
+  geom_smooth() +
   labs(title = "Correlation between BMI and number of medals", x = "BMI", y = "Nb of athletes") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave("cor_BMI_nbMed.pdf",path="image")
 ggsave("cor_BMI_nbMed.png",path="image")
+
+# rapport nb médailles sur nb athletes par pays
+
+# histogramme sur nb médailles par tranche d'âge
+df_medalPerAge<-na.omit(df[c("Age","Medal","Sex")])
+ggplot(df_medalPerAge,aes(Age,color=Sex)) +
+  geom_histogram(position="identity",
+                 fill="white",
+                 binwidth = 2,
+                 alpha=0.5) +
+  theme_bw() +
+  labs(title = "Histogram of number of medals compared to the age", x = "Age", y = "Number of medals") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave("hist_medalPerAge.png",path="image")
+ggsave("hist_medalPerAge.pdf",path="image")
+
+cor(df1_top10$nbAthletes,df1_top10$nbMedals)
