@@ -145,3 +145,10 @@ ggsave("hist_medalPerAge.png",path="image")
 ggsave("hist_medalPerAge.pdf",path="image")
 
 cor(df1_top10$nbAthletes,df1_top10$nbMedals)
+
+# nombre de médaille par BMI
+
+ggplot(na.omit(df2), aes(x = BMI_mean, y = nbMedals, color = Sex, size=nbMedals,alpha=0.5)) +
+  geom_jitter() +
+  labs(title = "The number of medals over the average BMI of athletes of all countries", x = "BMI", y = "Number of medals") +
+  theme(plot.title = element_text(hjust = 0.5))
